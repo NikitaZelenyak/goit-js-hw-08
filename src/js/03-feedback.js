@@ -1,8 +1,8 @@
 
-var throttle = require('lodash.throttle');
+import throttle  from 'lodash.throttle';
 const form = document.querySelector('.feedback-form');
 form.addEventListener("submit", onStandartBehaivor);
-form.addEventListener("input", throttle(onDataStorageFeedback, 250));
+form.addEventListener("input", throttle(onDataStorageFeedback));
 
 
 const STORAGE_FEEDBACK = "feedback-form-state";
@@ -14,7 +14,12 @@ ensureProvideLocalStorage();
 
 function onStandartBehaivor(e) {
     stopDefAction(e);
-
+    const emailValue = e.currentTarget.elements.email.value
+    const messageValue = e.currentTarget.elements.message.value
+    
+if (emailValue ===''||messageValue ==='' ) {
+    return alert('Attention!!! All input must be feeling')
+}
 
     
     e.currentTarget.reset()
@@ -29,9 +34,9 @@ function stopDefAction(e) {
 }
 
 function onDataStorageFeedback(e) {
-    const formElemets = e.currentTarget.elements;
-    const email = formElemets.email.value;
-    const message = formElemets.message.value;
+    const formElements = e.currentTarget.elements;
+    const email = formElements.email.value;
+    const message = formElements.message.value;
 
     dataForm.email = email;
     dataForm.message = message;
@@ -50,10 +55,13 @@ function ensureProvideLocalStorage() {
     const dataFormParse = JSON.parse(localStorage.getItem(STORAGE_FEEDBACK));
 
 
-    if (dataFormParse) {
+    if (dataFormParse !== null) {
         form.elements.email.value = dataFormParse.email;
         form.elements.message.value = dataFormParse.message;
     }
 };  
+
+
+
 
 
